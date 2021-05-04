@@ -1,0 +1,23 @@
+#This workflow will deploy a new artifact for cms-events
+name: Deploy artifact for CMS events
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Setup Github Packages
+        uses: actions/setup-java@v1
+        with:
+          java-version: 15.0.1
+      - name: Publish package
+        run: mvn --batch-mode deploy
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+

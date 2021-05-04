@@ -8,5 +8,12 @@
     <artifactId>events</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    
+    <distributionManagement>
+        <repository>
+            <id>github</id>
+            <name>Github Packages</name>
+            <url>https://maven.pkg.github.com/rohan23chhabra/cms-events</url>
+        </repository>
+    </distributionManagement>
+
 </project>

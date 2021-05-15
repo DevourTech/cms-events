@@ -55,7 +55,7 @@
         <repository>
             <id>github</id>
             <name>Github Packages</name>
-            <url>https://maven.pkg.github.com/rohan23chhabra/cms-events</url>
+            <url>https://maven.pkg.github.com/DevourTech/cms-events</url>
         </repository>
     </distributionManagement>
 
@@ -63,7 +63,7 @@
         <repository>
             <id>github</id>
             <name>Github packages</name>
-            <url>https://maven.pkg.github.com/rohan23chhabra/cms-core</url>
+            <url>https://maven.pkg.github.com/DevourTech/cms-core</url>
             <releases><enabled>true</enabled></releases>
             <snapshots><enabled>true</enabled></snapshots>
         </repository>

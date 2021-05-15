@@ -1,9 +1,9 @@
 package org.cms.events.assignment;
 
 import org.apache.kafka.clients.producer.KafkaProducer;
-import org.cms.events.apis.assignment.upload.AssignmentUploadEvent;
-import org.cms.events.apis.assignment.upload.AssignmentUploadEventException;
-import org.cms.events.apis.assignment.upload.AssignmentUploadProducer;
+import org.cms.core.files.assignment.Assignment;
+import org.cms.events.apis.assignment.AssignmentUploadEventException;
+import org.cms.events.apis.assignment.AssignmentUploadProducer;
 import org.cms.events.apis.config.ProducerConfigs;
 
 public class AssignmentUploadProducerImpl implements AssignmentUploadProducer {
@@ -20,5 +20,5 @@ public class AssignmentUploadProducerImpl implements AssignmentUploadProducer {
 
 	public void close() {}
 
-	public void produce(AssignmentUploadEvent event) throws AssignmentUploadEventException {}
+	public void produce(Assignment event) throws AssignmentUploadEventException {}
 }

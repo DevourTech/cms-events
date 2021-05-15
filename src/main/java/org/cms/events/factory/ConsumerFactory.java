@@ -1,6 +1,6 @@
 package org.cms.events.factory;
 
-import org.cms.events.apis.assignment.upload.AssignmentUploadConsumer;
+import org.cms.events.apis.assignment.AssignmentUploadConsumer;
 import org.cms.events.apis.config.ConsumerConfigs;
 import org.cms.events.assignment.AssignmentUploadConsumerImpl;
 

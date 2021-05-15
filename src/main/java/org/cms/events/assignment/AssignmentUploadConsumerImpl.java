@@ -7,15 +7,17 @@ import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.cms.core.files.assignment.Assignment;
 import org.cms.events.Event;
-import org.cms.events.apis.assignment.upload.AssignmentUploadConsumer;
-import org.cms.events.apis.assignment.upload.AssignmentUploadEvent;
-import org.cms.events.apis.assignment.upload.AssignmentUploadEventHandler;
+import org.cms.events.apis.assignment.AssignmentUploadConsumer;
+import org.cms.events.apis.assignment.AssignmentUploadEventFilter;
+import org.cms.events.apis.assignment.AssignmentUploadEventHandler;
 import org.cms.events.apis.config.ConsumerConfigs;
 
 public class AssignmentUploadConsumerImpl implements AssignmentUploadConsumer {
 
 	private AssignmentUploadEventHandler handler;
+	private AssignmentUploadEventFilter filter;
 	private final ConsumerConfigs config;
 	private ConsumingThread consumingThread;
 
@@ -24,7 +26,7 @@ public class AssignmentUploadConsumerImpl implements AssignmentUploadConsumer {
 	}
 
 	public void start() {
-		consumingThread = new ConsumingThread(config.getProperties(), config.getTopic(), handler);
+		consumingThread = new ConsumingThread(config.getProperties(), config.getTopic(), handler, filter);
 		consumingThread.start();
 	}
 
@@ -36,16 +38,28 @@ public class AssignmentUploadConsumerImpl implements AssignmentUploadConsumer {
 		this.handler = handler;
 	}
 
+	@Override
+	public void registerFilter(AssignmentUploadEventFilter filter) {
+		this.filter = filter;
+	}
+
 	private static class ConsumingThread extends Thread {
 
 		private final KafkaConsumer<String, String> kafkaConsumer;
 		private final AssignmentUploadEventHandler eventHandler;
+		private AssignmentUploadEventFilter filter;
 		private boolean notStopped;
 
-		public ConsumingThread(Properties properties, String topic, AssignmentUploadEventHandler eventHandler) {
+		public ConsumingThread(
+			Properties properties,
+			String topic,
+			AssignmentUploadEventHandler eventHandler,
+			AssignmentUploadEventFilter filter
+		) {
 			kafkaConsumer = new KafkaConsumer<>(properties);
 			kafkaConsumer.subscribe(Collections.singletonList(topic));
 			this.eventHandler = eventHandler;
+			this.filter = filter;
 			notStopped = true;
 		}
 
@@ -57,7 +71,7 @@ public class AssignmentUploadConsumerImpl implements AssignmentUploadConsumer {
 					if (!record.key().equals(Event.ASSIGNMENT_UPLOAD.name())) {
 						continue;
 					}
-					AssignmentUploadEvent event = JsonIterator.deserialize(record.value(), AssignmentUploadEvent.class);
+					Assignment event = JsonIterator.deserialize(record.value(), Assignment.class);
 					eventHandler.handle(event);
 				}
 			}

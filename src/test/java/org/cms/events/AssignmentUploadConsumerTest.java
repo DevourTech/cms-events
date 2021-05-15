@@ -2,8 +2,8 @@
 //
 //import java.util.Properties;
 //import org.apache.kafka.clients.consumer.ConsumerConfig;
-//import org.cms.events.apis.assignment.upload.AssignmentUploadConsumer;
-//import org.cms.events.apis.assignment.upload.AssignmentUploadEventHandler;
+//import org.cms.events.apis.assignment.AssignmentUploadConsumer;
+//import org.cms.events.apis.assignment.AssignmentUploadEventHandler;
 //import org.cms.events.apis.config.ConsumerConfigs;
 //import org.cms.events.factory.ConsumerFactory;
 //import org.junit.jupiter.api.Test;

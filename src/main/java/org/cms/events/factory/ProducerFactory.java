@@ -1,6 +1,6 @@
 package org.cms.events.factory;
 
-import org.cms.events.apis.assignment.upload.AssignmentUploadProducer;
+import org.cms.events.apis.assignment.AssignmentUploadProducer;
 import org.cms.events.apis.config.ProducerConfigs;
 import org.cms.events.assignment.AssignmentUploadProducerImpl;
 

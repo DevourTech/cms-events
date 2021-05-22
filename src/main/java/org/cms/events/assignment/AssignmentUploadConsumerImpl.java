@@ -7,6 +7,9 @@ import java.util.Properties;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
+import org.apache.logging.log4j.LogManager;
+import org.apache.logging.log4j.Logger;
+import org.cms.core.course.Course;
 import org.cms.core.files.assignment.Assignment;
 import org.cms.events.Event;
 import org.cms.events.apis.assignment.AssignmentUploadConsumer;
@@ -47,8 +50,9 @@ public class AssignmentUploadConsumerImpl implements AssignmentUploadConsumer {
 
 		private final KafkaConsumer<String, String> kafkaConsumer;
 		private final AssignmentUploadEventHandler eventHandler;
-		private AssignmentUploadEventFilter filter;
+		private final AssignmentUploadEventFilter filter;
 		private boolean notStopped;
+		private final Logger logger = LogManager.getLogger(ConsumingThread.class);
 
 		public ConsumingThread(
 			Properties properties,
@@ -68,11 +72,13 @@ public class AssignmentUploadConsumerImpl implements AssignmentUploadConsumer {
 			while (notStopped) {
 				ConsumerRecords<String, String> records = kafkaConsumer.poll(Duration.ofMillis(100));
 				for (ConsumerRecord<String, String> record : records) {
-					if (!record.key().equals(Event.ASSIGNMENT_UPLOAD.name())) {
-						continue;
-					}
 					Assignment event = JsonIterator.deserialize(record.value(), Assignment.class);
-					eventHandler.handle(event);
+					Course course = event.getCourse();
+					logger.info("Event received - " + course);
+					if (filter.satisfies(course)) {
+						logger.info("Sending event to handler");
+						eventHandler.handle(event);
+					}
 				}
 			}
 		}
